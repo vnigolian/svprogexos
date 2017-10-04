@@ -72,6 +72,14 @@ int main()
   test("IL FAIT BEAU A IBIZA");
   test("AAAAA");
   test("A");
+  test("abcdefghij");
+  test("ABCDEFGHIJ");
+  test("JIHGFEDCBA");
+  test("AABBCC");
+  test("BBCCZZ");
+  test("AB");
+  test("ZSSZZSSZZS");
+  test("ABCD");
  
   return 0;
 }
