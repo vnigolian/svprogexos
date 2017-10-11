@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <limits.h>
 
 void insert(int x, int n, int tab[n]);
 void insertionSort(int n,int src[n], int dest[n]);
@@ -7,10 +7,10 @@ void printTab(int n, int tab[n]);
 
 int main(){
 	int n=10;
-	int src[] = {1,4,3,45,63,2,54,434,42,10};	
+	int src[] = {1,0,-3,45,-63,2,54,434,-42,10};	
 	int dest[n];
 	for(int i=0;i<n;i++){
-		dest[i]=0;
+		dest[i]=INT_MAX;
 	}
 	
 	printTab(n,src);
@@ -31,7 +31,7 @@ void printTab(int n, int tab[n]){
 
 void insert(int x, int n, int tab[n]){
 	int i=0;
-	while(i<n && tab[i] !=0 &&x>tab[i]){
+	while(i<n && x>tab[i]){
 		i++;
 	}
 	if(i<n){
