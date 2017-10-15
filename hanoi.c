@@ -2,7 +2,7 @@
 
 #define NO_DISK 0
 
-#define N 7 // Initial tower size
+#define N 4 // Initial tower size
 
 typedef unsigned int	Disk; // A disk is defined by his radius
 typedef Disk			Pillar[N]; // A pillar is an array of N Disk
