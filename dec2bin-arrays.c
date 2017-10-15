@@ -140,10 +140,7 @@ int decimal(int size, char binary[size])
   return decimal_nonnegative(size,binary);
 }
 
-/* ======================================================================
- * All the rest below is not the core of the exercise but is just for
- * convenience.
- */
+
 
 /* ======================================================================
  * Tool function: test an int value and its binary writing
@@ -158,36 +155,16 @@ void test(int n)
   }
   
   binary(n,size,result);
-  printf("%i is %s\n",n,result);
-  printf("and %s is indeed %i.\n",result,decimal(size,result));
-  printf("done testing\n");
+  int dec = decimal(size,result);
+  if(dec==n){
+	  printf("%i_10 is %s_2\n",n,result);
+	  printf("and %s_2 is indeed %i_10.\n",result,dec);
+  }else{
+	  printf("%i_10 is %s_2\n",n,result);
+	  printf("but %s_2 is %i_10...\n",result,dec);
+  }
 }
 
-/* ======================================================================
- * Tool function: ask for some integer.
- */
-int require_int()
-{
-  int value=0;
-  printf("Enter some integer\n");
-  scanf("%i",&value);
-  
-  return value;
-}
-
-/* ======================================================================
- * Tool function: ask to continue or not.
- * 0 = no, >0 = yes
- */
-int go_ahead() {
-  char read='x';
-  do {
-	  printf("Shall we continue (y/n)?\n");
-      scanf("%c",&read);
-  } while ((read != 'y') && (read != 'Y') &&
-           (read != 'n') && (read != 'N'));
-  return (read == 'y') || (read == 'Y');
-}
 
 // ======================================================================
 int main()
