@@ -1,16 +1,47 @@
+/* ======================================================================
+ *
+ * Dichotomy guessing game
+ *
+ * Version: 1.0 
+ * Author: VZ Nigolian(EPFL, 2017)
+ * ======================================================================
+ */
+
 #include <stdio.h>
 
+/* ======================================================================
+ * Asks for two numbers
+ */
 void demander_nombres(int* a, int* b);
 
+/* ======================================================================
+ * Given a lower- and upper-limit, guesses the number that the user
+ * was thinking of using dichotomy 
+ */
 int trouver_nombre_avec_limites(int gauche,int droite);
 
+/* ======================================================================
+ * Guesses the number the user was thiking of without boundary numbers
+ * Used as an argument-less mask to trouver_nombre_sans_limites 
+ */
 int trouver_nombre_sans_limites();
+
+/* ======================================================================
+ * Guesses the number the user was thinking of by recursively looking for
+ * the boundary numbers and then guessing the number between those
+ * numbers.
+ */
 int trouver_nombre_sans_limites_rec(int power);
 
+/* ======================================================================
+ * Computes a^b if both a and b are positive and if they're not both 
+ * equal to zero
+ */
 int pow_rec(int a, int b);
 
 int main(){
 	int a,b;
+	printf("Pensez à un nombre...\n");
 	printf("Nous allons commencer par définir deux bornes et trouver votre nombre entre ces bornes\n");
 	demander_nombres(&a,&b);
 	trouver_nombre_avec_limites(a,b);
@@ -42,6 +73,7 @@ int trouver_nombre_avec_limites(int gauche, int droite){
 				return trouver_nombre_avec_limites(gauche,pivot);
 			}else{
 				printf("Trouvé, le nombre choisi était %i\n",pivot);
+				return pivot;
 			}
 		}
 	}

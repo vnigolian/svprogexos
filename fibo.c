@@ -3,7 +3,7 @@
 int demander_nombre(int min, int max);
 int Fibonacci(int n);
 int FibonacciIteratif(int n);
- 
+
 // ----------------------------------------------------------------------
 int main()
 {
@@ -58,7 +58,8 @@ int Fibonacci(int n)
   else
     return Fibonacci(n-1) + Fibonacci(n-2);
 }
- 
+
+
 /* --------------------------------------------------------------
  * fonction demandant à l'utilisateur un nombre compris
  * dans un intervalle [a, b], ou supérieur ou égal à a
@@ -75,7 +76,7 @@ int demander_nombre(int a, int b)
 		if (a >= b){
 			printf("supérieur ou égal à %i\n",a);
 		}else{
-				printf("compris entre %i et %i",a,b);
+				printf("compris entre %i et %i\n",a,b);
 				printf("\n%i\n",scanf("%i",&res));
 			
 		}
@@ -83,4 +84,6 @@ int demander_nombre(int a, int b)
  
    return res;
 }
+
+
 

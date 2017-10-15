@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <math.h> 
-#include <ctype.h>
+#include <math.h> //for log
+#include <ctype.h>//for isalpha and toupper
 #include <string.h>
  
  
@@ -70,13 +70,22 @@ int main()
 {
  
   test("IL FAIT BEAU A IBIZA");
+  //testing that repeating a character doesn't change the entropy
   test("AAAAA");
   test("A");
+  
+  //testing that using upper- or lower-case or the order doesn't change 
+  //the entropy
   test("abcdefghij");
   test("ABCDEFGHIJ");
   test("JIHGFEDCBA");
+  
+  //testing that changing the letters but not the numbers of occurrences
+  //doesn't change the entropy
   test("AABBCC");
   test("BBCCZZ");
+  
+  
   test("AB");
   test("ZSSZZSSZZS");
   test("ABCD");
