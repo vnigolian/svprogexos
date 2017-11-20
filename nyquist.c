@@ -3,25 +3,22 @@
  
 #define M_PI 3.14159265358979323846
  
+//notes : the C++ version used vectors inside the struct but since
+//it's impossible to use variable-sized array in structs in C then
+//the array must be considered separately when calling the functions. 
+
 // --------------------------------------------------
 struct Sinusoide {
   double amplitude;
   double frequence;
   double dephasage;
 };
- 
-// --------------------------------------------------
-struct Signal{
-	int taille;
-	struct Sinusoide sins[];
-};
+
 
 // --------------------------------------------------
-struct Signal_Echant {
+struct Echantillonage {
   double fe;       // fréquence d'échantillonnage
   double t0;       // temps initial
-  int taille;
-  double echantillons[];
 };
  
 // ======================================================================
@@ -35,11 +32,11 @@ double sin_pure(double x, struct Sinusoide s)
 // ======================================================================
 // fonction outil : signal = somme de sinus
  
-double signal(double x, struct Signal signal)
+double signal(double x, int taille, struct Sinusoide signal[taille])
 {
   double val=0.0;
-  for (int i=0;i<signal.taille;i++) {
-    val += sin_pure(x, signal.sins[i]);
+  for (int i=0;i<taille;i++) {
+    val += sin_pure(x, signal[i]);
   }
   return val;
 }
@@ -47,35 +44,36 @@ double signal(double x, struct Signal signal)
 // ======================================================================
 // échantillonnage d'un signal
  
-void echantillonne(struct Signal *signal, double freq,
-                            double t_min, double t_max, struct Signal_Echant* echant)
+void echantillonne(int taille, struct Sinusoide s[taille], double freq,
+                            double t_min, double t_max, struct Echantillonage* echant,
+                            int nb_echant, double echantillons[nb_echant])
 {
   echant->fe = freq;
   echant->t0 = t_min;
-  se.echantillons = vector<double>(1+size_t(freq * (t_max - t_min)));
- 
-  for (size_t i(0); i < se.echantillons.size(); ++i) {
-    se.echantillons[i] = signal(t_min + i / freq, s);
+   
+  for (int i=0; i < nb_echant; i++) {
+    echantillons[i] = signal(t_min + i / freq, taille, s);
   }
-  return se;
 }
  
 // ======================================================================
 // fonction outil : sinus cardinal
  
-double sinc(double x, double precision = 1e-8)
+double sinc(double x)
 {
-  return (abs(x) < precision ? 1.0 : sin(M_PI * x)/(M_PI * x));
+    
+  return (fabs(x) < 1e-8 ? 1.0 : sin(M_PI * x)/(M_PI * x));
 }
  
 // ======================================================================
 // formule de reconstruction
  
-double reconstruction(double x, Signal_Echant const& s)
+double reconstruction(double x, struct Echantillonage echant,
+                            int nb_echant, double echantillons[nb_echant])
 {
-  double valeur(0.0);
-  for (size_t i(0); i < s.echantillons.size(); ++i) {
-    valeur += s.echantillons[i] * sinc(s.fe * (x - s.t0) - i);
+  double valeur=0.0;
+  for (int i=0; i < nb_echant; ++i) {
+    valeur += echantillons[i] * sinc(echant.fe * (x - echant.t0) - i);
   }
   return valeur;
 }
@@ -83,29 +81,37 @@ double reconstruction(double x, Signal_Echant const& s)
 // ======================================================================
 int main()
 {
-  Signal s({
+
+  struct Sinusoide s[4] ={
     { 1.0 , 2.0, 0.0 }, // première composante
     { 0.5 , 4.0, 0.1 }, // ...
     { 0.33, 6.0, 0.2 }, // ...
-    { 0.25, 8.0, 0.3 }, // ...
-   });
+    { 0.25, 8.0, 0.3 } // ...
+   };
  
-  constexpr double t_min(0.0);
-  constexpr double t_max(2.0);
- 
-  Signal_Echant se1(echantillonne(s, 20.0, t_min, t_max));
-  Signal_Echant se2(echantillonne(s, 11.0, t_min, t_max));
- 
-  // « dessin » des trois courbes
-  constexpr size_t nb_points(1000);
-  constexpr double dt((t_max-t_min) / nb_points);
- 
-  for (double t(t_min); t <= t_max; t += dt) {
-    cout << t 
-         << " " << signal(t, s)
-         << " " << reconstruction(t, se1)
-         << " " << reconstruction(t, se2)
-      << endl;
+  double t_min=0.0;
+  double t_max=2.0;
+  
+  struct Echantillonage ech1;
+  double freq1 = 20.0;
+  int nb_echant1 = 1+(int)(freq1 * (t_max - t_min));
+  double echantillons1[nb_echant1];
+  echantillonne(4,s,freq1,t_min,t_max, &ech1, nb_echant1, echantillons1);
+  
+  struct Echantillonage ech2;
+  double freq2 = 11.0;
+  int nb_echant2 = 1+(int)(freq2 * (t_max - t_min));
+  double echantillons2[nb_echant2];
+  echantillonne(4,s,freq2,t_min,t_max, &ech2, nb_echant2, echantillons2);
+  
+  int nb_points=30;
+  double dt=(t_max-t_min)/nb_points;
+  
+  for(double t=t_min;t<=t_max;t+=dt){
+      printf("%lf8 %lf8 %lf8 %lf8\n",t,
+                                 signal(t,4,s),
+                                 reconstruction(t,ech1,nb_echant1,echantillons1),
+                                 reconstruction(t,ech2,nb_echant2,echantillons2));
   }
  
   return 0;

@@ -101,7 +101,7 @@ int main()
   Signal_Echant se2(echantillonne(s, 11.0, t_min, t_max));
  
   // « dessin » des trois courbes
-  constexpr size_t nb_points(1000);
+  constexpr size_t nb_points(30);
   constexpr double dt((t_max-t_min) / nb_points);
  
   for (double t(t_min); t <= t_max; t += dt) {
