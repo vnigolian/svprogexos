@@ -24,19 +24,19 @@ struct Echantillonage {
 // ======================================================================
 // fonction outil : composante sinusoidale pure
  
-double sin_pure(double t, struct Sinusoide s)
+double sin_pure(double x, struct Sinusoide s)
 {
-  return s.amplitude * sin(2 * M_PI * s.frequence * t + s.dephasage);
+  return s.amplitude * sin(2 * M_PI * s.frequence * x + s.dephasage);
 }
  
 // ======================================================================
 // fonction outil : signal = somme de sinus
  
-double signal(double t, int taille, struct Sinusoide signal[taille])
+double signal(double x, int taille, struct Sinusoide signal[taille])
 {
   double val=0.0;
   for (int i=0;i<taille;i++) {
-    val += sin_pure(t, signal[i]);
+    val += sin_pure(x, signal[i]);
   }
   return val;
 }
@@ -44,12 +44,15 @@ double signal(double t, int taille, struct Sinusoide signal[taille])
 // ======================================================================
 // échantillonnage d'un signal
  
-void echantillonne(int n, struct Sinusoide s[n],  
-				   struct Echantillonage echant,
-                   int nb_echant, double echantillons[nb_echant])
-{  
+void echantillonne(int taille, struct Sinusoide s[taille], double freq,
+                            double t_min, double t_max, struct Echantillonage* echant,
+                            int nb_echant, double echantillons[nb_echant])
+{
+  echant->fe = freq;
+  echant->t0 = t_min;
+   
   for (int i=0; i < nb_echant; i++) {
-    echantillons[i] = signal(echant.t0 + i / echant.fe, n, s);
+    echantillons[i] = signal(t_min + i / freq, taille, s);
   }
 }
  
@@ -65,12 +68,12 @@ double sinc(double x)
 // ======================================================================
 // formule de reconstruction
  
-double reconstruction(double t, struct Echantillonage echant,
+double reconstruction(double x, struct Echantillonage echant,
                             int nb_echant, double echantillons[nb_echant])
 {
   double valeur=0.0;
   for (int i=0; i < nb_echant; ++i) {
-    valeur += echantillons[i] * sinc(echant.fe * (t - echant.t0) - i);
+    valeur += echantillons[i] * sinc(echant.fe * (x - echant.t0) - i);
   }
   return valeur;
 }
