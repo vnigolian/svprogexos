@@ -79,7 +79,7 @@ double reconstruction(double t, struct Echantillonage echant,
 int main()
 {
 
-  struct Sinusoide s[4] ={
+  struct Sinusoide s[] ={
     { 1.0 , 2.0, 0.0 }, // première composante
     { 0.5 , 4.0, 0.1 }, // ...
     { 0.33, 6.0, 0.2 }, // ...
@@ -89,7 +89,7 @@ int main()
   double t_min=0.0;
   double t_max=2.0;
   double freq1 = 20.0;
-  double freq2 = 11.0;
+  double freq2 = 10.0;
   
   struct Echantillonage ech1={freq1,t_min};
   int nb_echant1 = 1+(int)(freq1 * (t_max - t_min));
@@ -101,12 +101,12 @@ int main()
   double echantillons2[nb_echant2];
   echantillonne(4,s,ech2, nb_echant2, echantillons2);
   
-  int nb_points=30;
+  int nb_points=100;
   double dt=(t_max-t_min)/nb_points;
   
-  printf("t         X(t)      X1(t)     X2(t)\n");
+  //printf("t         X(t)      X1(t)     X2(t)\n");
   for(double t=t_min;t<=t_max;t+=dt){
-      printf("%lf8 %lf8 %lf8 %lf8\n",t,
+      printf("%4lf %10lf %10lf %10lf\n",t,
                                  signal(t,4,s),
                                  reconstruction(t,ech1,nb_echant1,echantillons1),
                                  reconstruction(t,ech2,nb_echant2,echantillons2));
